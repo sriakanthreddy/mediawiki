@@ -1,0 +1,18 @@
+---
+# Installing and configuring mysql
+- name: Installing Mysql-server package
+  yum:
+    name: [mysql-server, MySQL-python27]
+    state: present
+
+- name: Restarting the services
+  service: name=mysqld state=started enabled=yes
+
+- name: Create a new database with name 'wiki_db'
+  mysql_db: name="wiki_db" state=present
+
+- name: Resetting the root password of mysql
+  mysql_user: name=wiki_user host={{item}} password="redhat" priv=*.*:ALL,GRANT state=present
+  with_items:
+    - "{{groups['role_app']}}"
+

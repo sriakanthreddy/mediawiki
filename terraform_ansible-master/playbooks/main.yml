@@ -1,0 +1,14 @@
+---
+
+# Installing application server
+- hosts: role_app
+  become: yes
+  roles:
+  - role: application
+
+# Installing database server
+
+- hosts: role_db
+  become: yes
+  roles:
+  - role: database

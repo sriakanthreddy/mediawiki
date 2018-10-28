@@ -1,0 +1,21 @@
+---
+# Application deployment process started
+- name: Installing Packages
+  yum:
+    name: [httpd, php, php-mysql, php-gd, php-xml, php-intl, mysql]
+    state: present
+
+- name: Downloading the package
+  get_url:
+    url: https://releases.wikimedia.org/mediawiki/1.24/mediawiki-1.24.2.tar.gz
+    dest: /tmp
+
+- name: Extracting the content
+  shell: |
+    cd /tmp
+    tar -zxpvf /tmp/mediawiki-1.24.2.tar.gz
+    mv /tmp/mediawiki-1.24.2 /var/www/html/mediawiki
+    chown -R apache:apache /var/www/html/mediawiki/
+    chmod 755 /var/www/html/mediawiki/
+  notify: restart httpd
+
